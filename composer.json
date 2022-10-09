@@ -1,0 +1,19 @@
+{
+  "name": "mr-money/wenchang-avata",
+  "description": "文昌链 Avata API快速接入 SDK",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "MrMoney\\WenchangAvata\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "mr-money"
+    }
+  ],
+  "require": {
+    "php": ">=7.2"
+  }
+}
