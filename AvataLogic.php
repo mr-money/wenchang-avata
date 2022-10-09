@@ -17,11 +17,11 @@ class AvataLogic
     private $apiSecret;
     private $domain;
 
-    public function __construct($data)
+    public function __construct(array $initData)
     {
-        $this->apiKey = $data['api_key'] ?? '';
-        $this->apiSecret = $data['api_secret'] ?? '';
-        $this->domain = $data['api_url'] ?? 'https://stage.apis.avata.bianjie.ai'; //测试地址
+        $this->apiKey = $initData['apiKey'] ?? '';
+        $this->apiSecret = $initData['apiSecret'] ?? '';
+        $this->domain = $initData['domain'] ?? 'https://stage.apis.avata.bianjie.ai'; //测试地址
     }
 
     /**
@@ -422,7 +422,7 @@ class AvataLogic
      *
      * @return float
      */
-    private function getMillisecond()
+    public function getMillisecond()
     {
         list($t1, $t2) = explode(' ', microtime());
         return (float)sprintf('%.0f', (floatval($t1) + floatval($t2)));
