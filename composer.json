@@ -5,7 +5,7 @@
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "MrMoney\\WenchangAvata\\": "src/"
+      "MrMoney\\AvataLogic\\": "src/"
     }
   },
   "authors": [

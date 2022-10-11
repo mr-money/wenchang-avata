@@ -9,7 +9,7 @@
  * https://apis.avata.bianjie.ai/
  */
 
-namespace AvataLogic;
+namespace MrMoney\AvataLogic;
 
 class AvataLogic
 {
