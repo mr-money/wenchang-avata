@@ -18,6 +18,8 @@ composer update mr-money/wenchang-avata
 
 ### 使用
 ```php
+use MrMoney\AvataLogic\AvataLogic;
+
 class Demo
 {
     public $AvataLogic;
