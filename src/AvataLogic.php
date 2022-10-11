@@ -404,18 +404,17 @@ class AvataLogic
             }
         }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $response_data = curl_exec($ch);
+        $response = curl_exec($ch);
 
         //$err = curl_error($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        $response_data = json_decode($response_data, true);
+        $response = json_decode($response, true);
 
-        $response = array(
+        return [
             'code' => $httpCode,
-            'result' => $response_data,
-        );
-        return $response;
+            'result' => $response,
+        ];
     }
 
     /** get timestamp
