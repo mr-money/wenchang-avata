@@ -3,6 +3,9 @@
 /**
  *
  * @description 文昌链Avata API 快速接入SDK
+ * 参考开发文档PHP
+ * 语言版本：https://github.com/bianjieai/avata-demos/tree/main/php
+ * 以上示例来自文昌链技术交流群「河北曼象无限科技发展有限公司」0307，感谢 @0307 的技术贡献
  *
  * @author Mr_money
  *
@@ -10,6 +13,8 @@
  */
 
 namespace MrMoney\AvataLogic;
+
+use Exception;
 
 class AvataLogic
 {
@@ -33,9 +38,13 @@ class AvataLogic
      * @param string $operationId 操作ID
      *
      * @return array
+     * @throws Exception
      */
     public function CreateChainAccount(string $name, string $operationId): array
     {
+        if (!$name) {
+            throw new Exception('必传参数为空');
+        }
         $body = [
             'name' => $name,
             'operation_id' => $operationId,
@@ -70,7 +79,7 @@ class AvataLogic
      *
      * @return array
      */
-    public function QueryAccountByName(string $name): array
+    public function QueryAccountByName(string $name = ''): array
     {
         $query = [
             'name' => $name,
@@ -83,16 +92,7 @@ class AvataLogic
      *
      * @api https://apis.avata.bianjie.ai/#tag/%E9%93%BE%E8%B4%A6%E6%88%B7%E6%8E%A5%E5%8F%A3/paths/~1v1beta1~1accounts/get
      *
-     * @param array $data [
-     * 'offset' => (string)'游标，默认为 0',
-     * 'limit' => (string)'每页记录数，默认为 10，上限为 50',
-     * 'account' => (string)'链账户地址',
-     * 'name' => (string)'链账户名称，支持模糊查询',
-     * 'operation_id' => (string)'操作 ID',
-     * 'start_date' => (string)'创建日期范围 - 开始，yyyy-MM-dd（UTC 时间）',
-     * 'end_date' => (string)'创建日期范围 - 结束，yyyy-MM-dd（UTC 时间）',
-     * 'sort_by' => (string)'排序规则：DATE_ASC / DATE_DESC',
-     * ]
+     * @param array $data
      *
      * @return array
      */
@@ -133,27 +133,28 @@ class AvataLogic
      *
      * @api https://apis.avata.bianjie.ai/#tag/NFT/paths/~1v1beta1~1nft~1classes/post
      *
-     * @param array $data [
-     * 'name' => 'NFT 类别名称',
-     * 'class_id' => 'NFT 类别 ID，仅支持小写字母及数字，以字母开头',
-     * 'owner' => 'NFT 类别权属者地址 链账户地址account',
-     * 'description' => '描述',
-     * 'tag' => (array)[ //交易标签
-     *              'key1' => 'value1'
-     *          ],
-     * ];
-     * @param $operationId
+     * @param array $data
+     * @param string $operationId
      *
      * @return array
+     * @throws Exception
      */
-    public function CreateClasses($data, $operationId): array
+    public function CreateClasses(array $data, string $operationId): array
     {
+        if (!$data['name'] || !$data['owner'] || !$data['operation_id']) {
+            throw new Exception('必传参数为空');
+        }
+
         $body = [
             'name' => $data['name'],
-            'class_id' => $data['class_id'],
+            'class_id' => $data['class_id'] ?? '',
+            'symbol' => $data['symbol'] ?? '',
+            'description' => $data['description'] ?? '',
+            'uri' => $data['uri'] ?? '',
+            'uri_hash' => $data['uri_hash'] ?? '',
+            'data' => $data['data'] ?? '',
             'owner' => $data['owner'],
-            'description' => $data['description'],
-            'tag' => $data['tag'],
+            'tag' => $data['tag'] ?? [],
             'operation_id' => $operationId,
         ];
         return $this->request('/v1beta1/nft/classes', [], $body, 'POST');
@@ -168,9 +169,13 @@ class AvataLogic
      * @param string $classId
      *
      * @return array
+     * @throws Exception
      */
-    public function QueryClassesDetail(string $classId): array
+    public function QueryClassesDetailById(string $classId): array
     {
+        if (!$classId) {
+            throw new Exception('必传参数为空');
+        }
         $query = [
             'id' => $classId,
         ];
@@ -187,13 +192,17 @@ class AvataLogic
      * @param string $operationId
      *
      * @return array
+     * @throws Exception
      */
     public function TransfersClasses(array $data, string $operationId): array
     {
+        if (!$data['recipient']) {
+            throw new Exception('必传参数为空');
+        }
         $body = [
             'recipient' => $data['recipient'],
             'operation_id' => $operationId,
-            'tag' => $data['tag'] ?: '',
+            'tag' => $data['tag'] ?? [],
         ];
         return $this->request('/v1beta1/nft/class-transfers/' . $data['class_id'] . '/' . $data['owner'], [], $body, 'POST');
     }
@@ -207,13 +216,18 @@ class AvataLogic
      * @param string $operationId
      *
      * @return array
+     * @throws Exception
      */
     public function CreateNft(array $data, string $operationId): array
     {
+        if (!$data['name']) {
+            throw new Exception('必传参数为空');
+        }
+
         $body = [
             'name' => $data['name'],
-            'uri' => $data['uri'] ?: '',
-            'recipient' => $data['recipient'],
+            'uri' => $data['uri'] ?? '',
+            'recipient' => $data['recipient'] ?? '',
             'operation_id' => $operationId,
         ];
         if (!empty($data['uri_hash'])) {
@@ -225,6 +239,7 @@ class AvataLogic
         if (!empty($data['tag'])) {
             $body['tag'] = $data['tag'];
         }
+
         return $this->request('/v1beta1/nft/nfts/' . $data['class_id'], [], $body, 'POST');
     }
 
