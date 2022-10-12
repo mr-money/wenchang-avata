@@ -141,7 +141,7 @@ class AvataLogic
      */
     public function CreateClasses(array $data, string $operationId): array
     {
-        if (!$data['name'] || !$data['owner'] || !$data['operation_id']) {
+        if (!$data['name'] || !$data['owner']) {
             throw new Exception('必传参数为空');
         }
 
