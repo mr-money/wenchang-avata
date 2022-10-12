@@ -220,7 +220,7 @@ class AvataLogic
      */
     public function CreateNft(array $data, string $operationId): array
     {
-        if (!$data['name']) {
+        if (!$data['name'] || !$data['class_id']) {
             throw new Exception('必传参数为空');
         }
 
