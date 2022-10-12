@@ -18,35 +18,18 @@ composer update mr-money/wenchang-avata
 
 ### 使用
 ```php
-use MrMoney\AvataLogic\AvataLogic;
+//构建对象
+$initData = [
+    'apiKey' => 'apiKey',
+    'apiSecret' => 'apiSecret',
+    'domain' => 'https://stage.apis.avata.bianjie.ai', //测试地址
+];
+$avataLogic = new MrMoney\AvataLogic\AvataLogic($initData);
 
-class Demo
-{
-    public $AvataLogic;
+//创建链账户demo
+$name = 'account_name';
+$operationId = 'operationId'.rand(1000,9999);
 
-    public function __construct()
-    {
-        $initData = [
-            'apiKey' => 'apiKey',
-            'apiSecret' => 'apiSecret',
-            'domain' => 'https://stage.apis.avata.bianjie.ai', //测试地址
-        ];
-        $this->AvataLogic = new AvataLogic($initData);
+$createRes = $avataLogic->CreateChainAccount($name,$operationId);
 
-    }
-
-
-    /**
-     * @description 创建链账户
-     * @return array
-     */
-    public function createAccount(): array
-    {
-        $name = 'account_name';
-        $operationId = 'operationId'.$this->AvataLogic->getMillisecond();
-
-        return $this->AvataLogic->CreateChainAccount($name,$operationId);
-
-    }
-}
 ```
