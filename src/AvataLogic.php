@@ -378,7 +378,9 @@ class AvataLogic
                 $params['body_' . $k] = $v;
             }
         }
-        ksort($params);
+
+        // 参数数组递归排序
+        $this->sortAll($params);
         $hexHash = hash('sha256', $timestamp . $this->apiSecret);
         if (count($params) > 0) {
             $s = json_encode($params, JSON_UNESCAPED_UNICODE);
@@ -430,6 +432,22 @@ class AvataLogic
             'code' => $httpCode,
             'result' => $response,
         ];
+    }
+
+
+    /**
+     * @description 参数排序
+     * @param $params
+     *
+     * @return void
+     */
+    function sortAll(&$params){
+        ksort($params);
+        foreach ($params as &$v){
+            if (is_array($v)) {
+                $this->sortAll($v);
+            }
+        }
     }
 
     /** get timestamp
